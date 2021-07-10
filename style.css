@@ -1,0 +1,35 @@
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+
+.calculator {
+  margin: 100px auto;
+  width: 300px;
+  background: grey;
+  padding: 10px;
+}
+.calculator-display {
+  background: greenyellow;
+  font-family: monospace;
+  text-align: right;
+  color: black;
+  font-weight: 500;
+  font-size: 20px;
+  padding: 6px 10px;
+  border: 2px solid black;
+  margin-bottom: 4px;
+  width: 100%;
+}
+.display-container,
+.buttons-container {
+  /* background: red; */
+}
+.row {
+  display: flex;
+}
+.row * {
+  flex: 1;
+}
