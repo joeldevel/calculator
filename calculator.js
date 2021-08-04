@@ -69,8 +69,8 @@ function resetOperands() {
   operands = [];
 }
 
-function resetOperation() {
-    operation = '';
+function resetOperators() {
+    operators = [];
 }
 
 // clearDisplay();
@@ -92,6 +92,18 @@ function pushOperation(e) {
       clearDisplay();
       resetOperands();
       resetOperation();
+      return;
+    }
+    if(e.target.dataset.op === 'SUB')  {
+        operands.push(input);
+        operators.push('SUB');
+        clearInput();
+      return;
+    }
+    if(e.target.dataset.op === 'MUL')  {
+        operands.push(input);
+        operators.push('MUL');
+        clearInput();
       return;
     }
     if(e.target.dataset.op === 'ADD')  {
@@ -119,9 +131,10 @@ function pushOperation(e) {
           // save it on the front
           operands.unshift(tmp);
           // eliminate operation
-          operators.pop();
+          operators.shift();
         }
-
+        resetOperands();
+        resetOperators();
       return;
     }
 
