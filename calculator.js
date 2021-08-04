@@ -91,7 +91,7 @@ function pushOperation(e) {
       clearInput();
       clearDisplay();
       resetOperands();
-      resetOperation();
+      resetOperators();
       return;
     }
     if(e.target.dataset.op === 'SUB')  {
@@ -103,6 +103,12 @@ function pushOperation(e) {
     if(e.target.dataset.op === 'MUL')  {
         operands.push(input);
         operators.push('MUL');
+        clearInput();
+      return;
+    }
+    if(e.target.dataset.op === 'DIV')  {
+        operands.push(input);
+        operators.push('DIV');
         clearInput();
       return;
     }
@@ -126,6 +132,10 @@ function pushOperation(e) {
           let op1 = operands.shift();
           let op2 = operands.shift();
           // operate
+          if(operators[0] === 'DIV' && op2 == 0) {
+            updateDisplay("ERR, cannot DIV by 0");
+            break;
+          }
           let tmp = calculate( operators[0], op1 ,op2);
           console.log("tmp operation: ", tmp);
           // save it on the front
