@@ -1,7 +1,7 @@
 // console.log(operate('DIV', 3,2));
 let input = '';
-let operand1=null;
-let operand2=null;
+let operands = [];
+let operators = [];
 // console.log('works');
 
 function add(x, y) {
@@ -21,6 +21,7 @@ function div(x, y) {
 }
 
 function operate(operator, operand1, operand2) {
+  console.log("inside operate: ", operand1, operand2, operator);
   let result = 0;
   switch (operator) {
     case 'ADD':
@@ -43,30 +44,41 @@ function operate(operator, operand1, operand2) {
 const digitButtons = document.querySelectorAll('button.digit');
 const operationButtons = document.querySelectorAll('.operation');
 const calculatorDisplay = document.querySelector('.calculator-display');
-
+// const inputDisplay = document
 clearInput();
 clearDisplay();
 
 // console.log(digitButtons);
 // console.log(operationButtons);
 digitButtons.forEach(btn=>addEventListener('click', pushDigit));
-operationButtons.forEach(brn=>addEventListener('click', pushOperation));
+operationButtons.forEach(btn=>addEventListener('click', pushOperation));
 
 function clearDisplay() {
-  calculatorDisplay.value='';
+  calculatorDisplay.value = '';
 }
+
 function clearInput() {
   input = '';
 }
+
 function updateDisplay(input) {
-  calculatorDisplay.value=input;
+  calculatorDisplay.value = input;
 }
+
+function resetOperands() {
+  operands = [];
+}
+
+function resetOperation() {
+    operation = '';
+}
+
 // clearDisplay();
 
 function pushDigit(e) {
   if(e.target.className === 'digit') {
     input += e.target.dataset.value;
-    console.log(input);
+    console.log('pushDigit: ',input);
     updateDisplay(input);
   }
   // console.log(e.target.dataset.value);
@@ -75,40 +87,41 @@ function pushDigit(e) {
 function pushOperation(e) {
   if(e.target.classList.contains('operation')) {
     // console.log('its an op');
-    if(e.target.dataset.op==='CLR')  {
-      clearDisplay();
+    if(e.target.dataset.op === 'CLR')  {
       clearInput();
-      operand1 = null;
-      operand2 = null;
+      clearDisplay();
+      resetOperands();
+      resetOperation();
       return;
     }
-    if(e.target.dataset.op==='EQ')  {
-      //call calculate
-      clearInput();
-      clearDisplay();
-      // calculate(e.target.dataset.op);
-      if(operand1!=null && operand2!=null) {
+    if(e.target.dataset.op === 'ADD')  {
+        operands.push(input);
+        operators.push('ADD');
+        console.log('inside ADD ', operands[0], operands[1]);
         clearInput();
-        clearDisplay();
-        calculate(e.target.dataset.op);
-        return
-      }
-      console.log('=');
+      return;
+    }
+    if(e.target.dataset.op === 'EQ')  {
+        operands.push(input);
+        // while operators
+        // deque 2 operands ad apply operation(front)
+        // deque operation
+        // enque result
+        // calculate(operation);
+        while(operators.length != 0) {
+          // console.log('looping');
+          // grab two elements
+          let op1 = operands.shift();
+          let op2 = operands.shift();
+          // operate
+          let tmp = calculate( operators[0], op1 ,op2);
+          console.log("tmp operation: ", tmp);
+          // save it on the front
+          operands.unshift(tmp);
+          // eliminate operation
+          operators.pop();
+        }
 
-      return;
-    }
-    if( operand1===null) {
-      operand1 = parseInt(input);
-      clearInput();
-      clearDisplay();
-      console.log('op1',operand1);
-      return;
-    }
-    if(operand2===null) {
-      operand2 = parseInt(input);
-      clearInput();
-      clearDisplay();
-      console.log('op2', operand2);
       return;
     }
 
@@ -116,9 +129,17 @@ function pushOperation(e) {
   }
   // get input
   //store in op1
-
+return;
 }
-function calculate(op) {
-  let output = operate(op, operand1, operand2);
+
+function calculate(op, op1, op2) {
+  let output = operate(op, parseFloat(op1), parseFloat(op2));
+  console.log('ouptup: ', output);
   updateDisplay(output);
+  // resetOperands();
+  // resetOperation();
+  // operands[0] = output;
+  // operands[1] = 0;
+  console.log("operands: ",operands[0], operands[1]);
+  return output;
 }
